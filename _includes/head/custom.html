@@ -60,6 +60,21 @@ document.addEventListener('DOMContentLoaded', function() {
   body.classList.add('accent-border-top');
 });
 
+// All Posts 分类折叠。
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.blog-category-toggle').forEach(toggle => {
+    const section = toggle.closest('.blog-category-section');
+    const grid = section ? section.querySelector('.blog-grid') : null;
+    if (!section || !grid) return;
+
+    toggle.addEventListener('click', function() {
+      const isCollapsed = section.classList.toggle('is-collapsed');
+      toggle.setAttribute('aria-expanded', String(!isCollapsed));
+      grid.hidden = isCollapsed;
+    });
+  });
+});
+
 // 根据词汇表 Check 列状态给整行上色。
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.post-content table').forEach(table => {
@@ -87,16 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const content = document.querySelector('.post-content');
   const title = document.querySelector('.post-title');
   if (!toc || !nav || !content) return;
-
-  function syncTocPosition() {
-    const rect = toc.getBoundingClientRect();
-    document.documentElement.style.setProperty('--post-toc-left', `${rect.left}px`);
-    document.documentElement.style.setProperty('--post-toc-width', `${rect.width}px`);
-  }
-
-  syncTocPosition();
-  window.addEventListener('resize', syncTocPosition);
-  window.addEventListener('load', syncTocPosition);
 
   let headings = Array.from(content.querySelectorAll('h2, h3'));
   if (headings.length === 0 && title) {

@@ -1,3 +1,9 @@
-﻿main:
-  - title: "Home"
+main:
+  - title: "Archives"
     url: "/"
+
+  - title: "All Posts"
+    url: "/blog/"
+
+  - title: "About"
+    url: "/about/"

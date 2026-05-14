@@ -5,7 +5,8 @@ date: 2026-05-10
 tags: ["CreepyNuts"]
 category: "J-POP"
 excerpt: "『耳無し芳一Style』- 「かつて天才だった俺たちへ」 収録"
-cover_image: images/CreepyNuts/ToUsFormerProdigies.jpg
+description: "Creepy Nuts『耳無し芳一Style』相关电台对话和歌词学习笔记。"
+cover_image: /images/CreepyNuts/ToUsFormerProdigies.jpg
 ---
 ## 《Creepy Nutsのオールナイトニッポン0》
 

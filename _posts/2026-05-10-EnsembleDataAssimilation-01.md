@@ -5,7 +5,8 @@ date: 2026-05-10
 tags: ["Data","Model"]
 category: "Research"
 excerpt: "Basic knowledge of CMIP6"
-cover_image: images/DataAssimilation/DA.png
+description: "Introductory notes on ensemble data assimilation and DART references."
+cover_image: /images/DataAssimilation/DA.png
 ---
 ## Introduction to ensemble data assimilation
 

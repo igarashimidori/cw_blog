@@ -5,6 +5,7 @@ date: 2026-05-07
 tags: ["IELTS"]
 category: "Language Learning"
 excerpt: "《雅思词汇真经》词汇"
+description: "《雅思词汇真经》学习记录和词汇整理。"
 cover_image: /images/IELTS/vocabulary_IELTS.jpg
 ---
 

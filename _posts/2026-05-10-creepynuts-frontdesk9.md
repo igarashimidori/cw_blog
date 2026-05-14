@@ -5,7 +5,8 @@ date: 2026-05-10
 tags: ["CreepyNuts"]
 category: "J-POP"
 excerpt: "『フロント9番』 - 「アンサンブル・プレイ」 収録"
-cover_image: images/CreepyNuts/EnsemblePlay.jpg
+description: "Creepy Nuts『フロント9番』相关电台对话和歌词学习笔记。"
+cover_image: /images/CreepyNuts/EnsemblePlay.jpg
 ---
 
 ## 2022年9月12日《Creepy Nutsのオールナイトニッポン》
