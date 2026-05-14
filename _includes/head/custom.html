@@ -1,0 +1,164 @@
+<link rel="apple-touch-icon" sizes="180x180" href="{{ site.baseurl }}/images/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="{{ site.baseurl }}/images/favicon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ site.baseurl }}/images/favicon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ site.baseurl }}/images/favicon.png">
+<link rel="manifest" href="{{ site.baseurl }}/images/site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="{{ site.baseurl }}/images/mstile-144x144.png?v=M44lzPylqQ">
+<meta name="msapplication-config" content="{{ site.baseurl }}/images/browserconfig.xml?v=M44lzPylqQ">
+<meta name="theme-color" content="#ffffff">
+
+<!-- 学术图标和增强的强调色样式 -->
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/academicons.css"/>
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/css/accent-enhancements.css"/>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+<!-- 强调色增强的JavaScript动效 -->
+<script>
+// 页面加载后的滚动动画
+document.addEventListener('DOMContentLoaded', function() {
+  // 滚动触发动画
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+      }
+    });
+  }, observerOptions);
+  
+  // 为元素添加动画类
+  document.querySelectorAll('.paper-box, .highlight-block').forEach(el => {
+    el.classList.add('fade-in-up');
+    observer.observe(el);
+  });
+  
+  // 为重要链接添加强调色效果
+  document.querySelectorAll('a[href*="pdf"], a[href*="github"], a[href*="arxiv"]').forEach(link => {
+    link.classList.add('link-accent');
+  });
+});
+
+// 动态添加装饰条
+document.addEventListener('DOMContentLoaded', function() {
+  const body = document.body;
+  body.classList.add('accent-border-top');
+});
+
+// 根据词汇表 Check 列状态给整行上色。
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.post-content table').forEach(table => {
+    const firstHeader = table.querySelector('thead th:first-child');
+    if (!firstHeader || firstHeader.textContent.trim().toLowerCase() !== 'check') {
+      return;
+    }
+
+    table.querySelectorAll('tbody tr').forEach(row => {
+      const checkCell = row.querySelector('td:first-child');
+      if (!checkCell) return;
+
+      const rawStatus = checkCell.textContent.trim().toLowerCase();
+      const isDone = rawStatus === '- [x]' || rawStatus === '[x]' || rawStatus === 'x';
+      row.classList.add(isDone ? 'vocab-row--done' : 'vocab-row--todo');
+      checkCell.innerHTML = `<input class="vocab-check" type="checkbox" disabled ${isDone ? 'checked' : ''} aria-label="${isDone ? 'memorized' : 'not memorized'}">`;
+    });
+  });
+});
+
+// 生成文章右侧目录。
+document.addEventListener('DOMContentLoaded', function() {
+  const toc = document.querySelector('.post-toc');
+  const nav = document.querySelector('.post-toc__nav');
+  const content = document.querySelector('.post-content');
+  const title = document.querySelector('.post-title');
+  if (!toc || !nav || !content) return;
+
+  function syncTocPosition() {
+    const rect = toc.getBoundingClientRect();
+    document.documentElement.style.setProperty('--post-toc-left', `${rect.left}px`);
+    document.documentElement.style.setProperty('--post-toc-width', `${rect.width}px`);
+  }
+
+  syncTocPosition();
+  window.addEventListener('resize', syncTocPosition);
+  window.addEventListener('load', syncTocPosition);
+
+  let headings = Array.from(content.querySelectorAll('h2, h3'));
+  if (headings.length === 0 && title) {
+    headings = [title];
+  }
+
+  if (headings.length === 0) {
+    toc.remove();
+    return;
+  }
+
+  const list = document.createElement('ol');
+  list.className = 'post-toc__list';
+
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `section-${index + 1}`;
+    }
+
+    const item = document.createElement('li');
+    item.className = `post-toc__item post-toc__item--${heading.tagName.toLowerCase()}`;
+
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent.trim();
+    link.className = 'post-toc__link';
+
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+
+  nav.appendChild(list);
+
+  const links = Array.from(nav.querySelectorAll('.post-toc__link'));
+  const linkById = new Map(links.map(link => [decodeURIComponent(link.hash.slice(1)), link]));
+
+  function setActiveLink(id) {
+    links.forEach(link => link.classList.remove('is-active'));
+    const activeLink = linkById.get(id);
+    if (activeLink) {
+      activeLink.classList.add('is-active');
+    }
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    const visibleEntries = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+    if (visibleEntries.length > 0) {
+      setActiveLink(visibleEntries[0].target.id);
+    }
+  }, {
+    rootMargin: '-20% 0px -65% 0px',
+    threshold: 0
+  });
+
+  headings.forEach(heading => observer.observe(heading));
+  if (headings[0]) {
+    setActiveLink(headings[0].id);
+  }
+});
+</script>
+
+<!-- end custom head snippets -->

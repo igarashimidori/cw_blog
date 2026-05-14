@@ -1,0 +1,111 @@
+---
+layout: default
+author_profile: true
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% assign post_word_count = content | strip_html | number_of_words %}
+{% assign reading_minutes = post_word_count | divided_by: 200 %}
+{% assign reading_remainder = post_word_count | modulo: 200 %}
+{% if reading_remainder > 0 %}
+  {% assign reading_minutes = reading_minutes | plus: 1 %}
+{% endif %}
+{% if reading_minutes < 1 %}
+  {% assign reading_minutes = 1 %}
+{% endif %}
+
+<div class="post-layout-with-toc">
+  <aside class="post-toc" aria-label="文章目录">
+    <div class="post-toc__inner">
+      <h2 class="post-toc__title">Outline</h2>
+      <nav class="post-toc__nav"></nav>
+    </div>
+  </aside>
+
+  <article class="post-article" itemscope itemtype="http://schema.org/BlogPosting">
+    <meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">
+    <meta itemprop="datePublished" content="{{ page.date | date_to_xmlschema }}">
+
+    <header class="post-header">
+      {% if page.cover_image %}
+      <div class="post-cover">
+        <img src="{{ page.cover_image | relative_url }}" alt="{{ page.title }}">
+      </div>
+      {% endif %}
+
+      <h1 class="post-title" itemprop="name">{{ page.title }}</h1>
+
+      <div class="post-meta">
+        <span class="post-date post-meta-item">
+          <i class="fas fa-calendar-alt"></i>
+          <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
+        </span>
+
+        <span class="post-meta-separator" aria-hidden="true">|</span>
+        <span class="post-word-count post-meta-item">
+          <i class="fas fa-align-left"></i>
+          {{ post_word_count }} words
+        </span>
+
+        <span class="post-meta-separator" aria-hidden="true">|</span>
+        <span class="post-reading-time post-meta-item">
+          <i class="fas fa-clock"></i>
+          {{ reading_minutes }} min read
+        </span>
+
+        {% if page.location %}
+        <span class="post-meta-separator" aria-hidden="true">|</span>
+        <span class="post-meta-item">
+          <i class="fas fa-map-marker-alt"></i>
+          {{ page.location }}
+        </span>
+        {% endif %}
+
+        {% if page.tags and page.tags.size > 0 %}
+        <span class="post-meta-separator" aria-hidden="true">|</span>
+        <span class="post-tags post-meta-item">
+          <i class="fas fa-tags"></i>
+          {% for tag in page.tags %}
+            <span class="inner-tag-badge tag-small">{{ tag }}</span>
+          {% endfor %}
+        </span>
+        {% endif %}
+      </div>
+    </header>
+
+    <section class="post-content" itemprop="articleBody">
+      {{ content }}
+    </section>
+
+    {% if page.previous or page.next %}
+    <nav class="post-pagination" aria-label="Post navigation">
+      {% if page.previous %}
+      <a class="post-pagination__card post-pagination__card--prev" href="{{ page.previous.url | relative_url }}">
+        <span class="post-pagination__eyebrow">
+          <i class="fas fa-arrow-left"></i>
+          Previous Post
+        </span>
+        <span class="post-pagination__title">{{ page.previous.title }}</span>
+        <span class="post-pagination__date">{{ page.previous.date | date: "%B %d, %Y" }}</span>
+      </a>
+      {% else %}
+      <span class="post-pagination__card post-pagination__card--empty" aria-hidden="true"></span>
+      {% endif %}
+
+      {% if page.next %}
+      <a class="post-pagination__card post-pagination__card--next" href="{{ page.next.url | relative_url }}">
+        <span class="post-pagination__eyebrow">
+          Next Post
+          <i class="fas fa-arrow-right"></i>
+        </span>
+        <span class="post-pagination__title">{{ page.next.title }}</span>
+        <span class="post-pagination__date">{{ page.next.date | date: "%B %d, %Y" }}</span>
+      </a>
+      {% else %}
+      <span class="post-pagination__card post-pagination__card--empty" aria-hidden="true"></span>
+      {% endif %}
+    </nav>
+    {% endif %}
+  </article>
+</div>
